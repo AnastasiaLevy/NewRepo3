@@ -1,0 +1,113 @@
+-- --------------------------------------------------
+-- Creating all tables
+-- --------------------------------------------------
+
+-- Creating table 'Events'
+CREATE TABLE [dbo].[Events] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(max)  NOT NULL,
+    [Schedule] nvarchar(max)  NOT NULL
+);
+GO
+
+-- Creating table 'Grades'
+CREATE TABLE [dbo].[Grades] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Value] int  NOT NULL,
+    [EventId] int  NOT NULL,
+    [PeopleId] int  NOT NULL
+);
+GO
+
+-- Creating table 'Labs'
+CREATE TABLE [dbo].[Labs] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Schedule] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'People'
+CREATE TABLE [dbo].[People] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [FirstName] nvarchar(max)  NOT NULL,
+    [LastName] nvarchar(max)  NOT NULL,
+    [UserName] nvarchar(max)  NOT NULL,
+    [Password] nvarchar(max)  NOT NULL,
+    [LabId] int  NOT NULL
+);
+GO
+
+-- --------------------------------------------------
+-- Creating all PRIMARY KEY constraints
+-- --------------------------------------------------
+
+-- Creating primary key on [Id] in table 'Events'
+ALTER TABLE [dbo].[Events]
+ADD CONSTRAINT [PK_Events]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'Grades'
+ALTER TABLE [dbo].[Grades]
+ADD CONSTRAINT [PK_Grades]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'Labs'
+ALTER TABLE [dbo].[Labs]
+ADD CONSTRAINT [PK_Labs]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'People'
+ALTER TABLE [dbo].[People]
+ADD CONSTRAINT [PK_People]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- --------------------------------------------------
+-- Creating all FOREIGN KEY constraints
+-- --------------------------------------------------
+
+-- Creating foreign key on [EventId] in table 'Grades'
+ALTER TABLE [dbo].[Grades]
+ADD CONSTRAINT [FK_EventGrade]
+    FOREIGN KEY ([EventId])
+    REFERENCES [dbo].[Events]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_EventGrade'
+CREATE INDEX [IX_FK_EventGrade]
+ON [dbo].[Grades]
+    ([EventId]);
+GO
+
+-- Creating foreign key on [PeopleId] in table 'Grades'
+ALTER TABLE [dbo].[Grades]
+ADD CONSTRAINT [FK_PeopleGrade]
+    FOREIGN KEY ([PeopleId])
+    REFERENCES [dbo].[People]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PeopleGrade'
+CREATE INDEX [IX_FK_PeopleGrade]
+ON [dbo].[Grades]
+    ([PeopleId]);
+GO
+
+-- Creating foreign key on [LabId] in table 'People'
+ALTER TABLE [dbo].[People]
+ADD CONSTRAINT [FK_LabPeople]
+    FOREIGN KEY ([LabId])
+    REFERENCES [dbo].[Labs]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_LabPeople'
+CREATE INDEX [IX_FK_LabPeople]
+ON [dbo].[People]
+    ([LabId]);
+GO
+
